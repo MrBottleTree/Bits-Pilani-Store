@@ -1,0 +1,29 @@
+{
+  "name": "Bits Pilani Store",
+  "short_name": "Bits Store",
+  "description": "BITS Market Place, Made by BITSians, for BITSians!",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/static/images/icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/images/icon_144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/images/icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

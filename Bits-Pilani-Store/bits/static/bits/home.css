@@ -1,0 +1,320 @@
+.items-container {
+    padding: 25px 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #2d3748;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.section-title:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #4361ee, #3f37c9);
+    border-radius: 2px;
+}
+
+/* Items grid */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+/* Item card styles */
+.item-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid #eaeaea;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Sold item styling */
+.item-card.sold {
+    opacity: 0.85;
+    background-color: #f5f5f5;
+}
+
+.sold-marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.sold-text {
+    font-size: 24px;
+    font-weight: 800;
+    transform: rotate(-30deg);
+    background-color: rgba(220, 53, 69, 0.8);
+    padding: 5px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+/* Item image */
+.item-image {
+    height: 180px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.item-image img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Item info section */
+.item-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    border-top: 1px solid #f0f0f0;
+}
+
+.item-title {
+    font-size: 16px;
+    margin: 0 0 8px 0;
+    color: #2d3748;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e63946;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+/* Description with 2-line truncation */
+.item-description-container {
+    margin-bottom: 12px;
+    background-color: #f8f9fa;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    position: relative;
+}
+
+.item-description {
+    line-height: 1.5;
+    color: #4a5568;
+    max-height: 3em; /* Approximately 2 lines */
+    overflow: hidden;
+    position: relative;
+}
+
+.item-description::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 1.5em; /* Height of one line */
+    background: linear-gradient(to right, rgba(248, 249, 250, 0), rgba(248, 249, 250, 1) 90%);
+    pointer-events: none;
+}
+
+
+/* Item metadata */
+.item-meta {
+    margin-top: auto;
+    font-size: 12px;
+    color: #718096;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.meta-label {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.item-meta i {
+    margin-right: 4px;
+    color: #4361ee;
+}
+
+/* WhatsApp contact button */
+.item-actions {
+    margin-top: 10px;
+}
+
+.whatsapp-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #25D366;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    z-index: 2;
+    position: relative;
+}
+
+.whatsapp-link:hover {
+    background-color: #128C7E;
+}
+
+.whatsapp-link i {
+    margin-right: 6px;
+    font-size: 16px;
+}
+
+/* No items message */
+.no-items {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    color: #718096;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.no-items i {
+    color: #4361ee;
+    margin-bottom: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+    
+    .item-image {
+        height: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .item-image {
+        height: 140px;
+    }
+}
+    /* Pagination Styles */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin: 2rem 0;
+        padding: 0;
+        list-style: none;
+    }
+    
+    .pagination li {
+        margin: 0 0.2rem;
+    }
+    
+    .pagination .page-item a,
+    .pagination .page-item span {
+        display: block;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #333;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        transition: all 0.2s ease;
+    }
+    
+    .pagination .page-item a:hover {
+        background-color: #e9e9e9;
+    }
+    
+    .pagination .page-item.active span {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+    
+    .pagination .page-item.disabled span {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .repost-btn {
+        background-color: #4361ee;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
+    }
+    
+    .repost-btn:hover {
+        background-color: #3a55d1;
+    }
+    
+    .repost-btn i {
+        margin-right: 6px;
+    }

@@ -1,0 +1,488 @@
+{% extends 'bits/layout.html' %}
+{% load static %}
+
+{% block title %}{% if item %}Edit Product{% else %}Add Product{% endif %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bits/add_product.css' %}">
+<style>
+.terms-checkbox-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.terms-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.terms-checkbox-label input[type="checkbox"] {
+  margin-right: 10px;
+  margin-top: 2px;
+  width: auto;
+}
+
+.terms-checkbox-label span {
+  line-height: 1.4;
+}
+
+.terms-checkbox-label a {
+  color: var(--accent);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.terms-checkbox-label a:hover {
+  color: #e06b2c;
+}
+
+.terms-error-message {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  display: none;
+}
+
+/* Terms and Conditions Modal */
+.terms-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.terms-modal.show {
+  display: block;
+  opacity: 1;
+}
+
+.terms-modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 800px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.terms-modal.show .terms-modal-content {
+  transform: translateY(0);
+}
+
+.terms-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+}
+
+.terms-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.terms-close {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--light-text);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.terms-close:hover {
+  color: var(--accent);
+}
+
+.terms-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.terms-modal-body h3 {
+  color: var(--primary);
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.terms-modal-body h4 {
+  color: var(--primary);
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.terms-modal-body p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.terms-modal-body ul {
+  margin-bottom: 15px;
+  padding-left: 25px;
+}
+
+.terms-modal-body li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.terms-modal-body ul ul {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.terms-modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+  text-align: right;
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+}
+
+.terms-close-btn {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.terms-close-btn:hover {
+  background-color: #e06b2c;
+}
+
+@media (max-width: 768px) {
+  .terms-modal-content {
+    width: 95%;
+    margin: 10% auto;
+    max-height: 80vh;
+  }
+  
+  .terms-modal-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .terms-modal-body {
+    padding: 15px;
+  }
+  
+  .terms-modal-body h3 {
+    font-size: 1.1rem;
+  }
+  
+  .terms-modal-body h4 {
+    font-size: 1rem;
+  }
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="add-product-container">
+  <h2 class="add-product-title">{% if item %}Edit Product{% else %}Add New Product{% endif %}</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="add-product-form">
+      {% csrf_token %}
+      <div class="add-product-form-fields">
+          {{ form.non_field_errors }}
+          
+          {% for field in form %}
+          <div class="form-group">
+              {{ field.errors }}
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}
+              <small class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+          </div>
+          {% endfor %}
+      </div>
+      
+      <div class="add-product-image-upload">
+          <label class="add-product-image-label">Product Images</label>
+          <div id="uploadArea" class="upload-area">
+              <input type="file" id="image-input" name="images" multiple accept="image/*">
+              <p>Drag images here or click to select images</p>
+          </div>
+
+          <div id="noImagesMessage">No images selected.</div>
+
+          <div id="imagePreview" class="add-product-image-preview"></div>
+
+          <input type="hidden" name="image_order" id="imageOrder">
+          {% if item %}
+          <input type="hidden" name="existing_images" id="existingImages" value="{{ existing_images_json }}">
+          {% endif %}
+      </div>
+
+      <div class="terms-checkbox-container">
+          <label class="terms-checkbox-label">
+              <input type="checkbox" id="termsCheckbox" name="terms_accepted" required>
+              <span>I agree to the <a href="#" id="termsLink">terms and conditions</a></span>
+          </label>
+          <div class="terms-error-message" id="termsError">You must agree to the terms and conditions</div>
+      </div>
+
+      <button type="submit" class="add-product-submit-btn">
+          {% if item %}Update Product{% else %}List Product{% endif %}
+      </button>
+  </form>
+</div>
+
+<div id="termsModal" class="terms-modal">
+  <div class="terms-modal-content">
+      <div class="terms-modal-header">
+          <h2>BITS Pilani Store Terms and Conditions</h2>
+          <span class="terms-close">&times;</span>
+      </div>
+      <div class="terms-modal-body">
+          <p><strong>Last Updated:</strong> 23rd April 2025 14:21</p>
+
+          <h3>1. Introduction</h3>
+          <p>BITS Pilani Store is a peer-to-peer marketplace created exclusively for members of BITS Pilani across the Goa, Pilani, and Hyderabad campuses. These Terms govern your use of the platform as a buyer or seller.</p>
+
+          <h3>2. Platform Nature and Limitations</h3>
+          <ul>
+              <li>BITS Pilani Store acts solely as a classified listings service connecting buyers and sellers.</li>
+              <li>All communications and transactions happen outside the platform.</li>
+              <li>We do <strong>not</strong>:
+                  <ul>
+                      <li>Intervene in transactions</li>
+                      <li>Process payments or offer escrow</li>
+                      <li>Verify product authenticity</li>
+                      <li>Guarantee transaction outcomes</li>
+                  </ul>
+              </li>
+          </ul>
+
+          <h3>3. User Eligibility and Accounts</h3>
+          <ul>
+              <li>Only BITS Pilani members with official email IDs may use the platform.</li>
+              <li>One user = One account. No duplicates.</li>
+              <li>You are accountable for all activity under your account.</li>
+          </ul>
+
+          <h3>4. Listing Policies</h3>
+          <h4>4.1 Allowed Listings</h4>
+          <ul>
+              <li>Used textbooks and study materials</li>
+              <li>Working electronics</li>
+              <li>Furniture and daily-use hostel items</li>
+              <li>Any other legal, non-restricted items</li>
+          </ul>
+
+          <h4>4.2 Prohibited Listings (Strict Ban)</h4>
+          <ul>
+              <li>Drugs or drug-related items</li>
+              <li>Weapons</li>
+              <li>Stolen or unverified goods</li>
+              <li>Fake, pirated, or replica products</li>
+              <li>Expired consumables or medicine</li>
+              <li>Animals (live/dead)</li>
+              <li>Plagiarism/cheating tools</li>
+              <li>Adult or explicit content</li>
+              <li>Items violating campus policies or Indian law</li>
+          </ul>
+
+          <h3>5. Transaction Process</h3>
+          <ul>
+              <li>Contact sellers through the WhatsApp link provided.</li>
+              <li>All deals, chats, and payments happen off-platform.</li>
+              <li>Suggested best practices:
+                  <ul>
+                      <li>Meet in safe, common areas on campus</li>
+                      <li>Thoroughly inspect before paying</li>
+                      <li>Use trusted payment channels like UPI</li>
+                      <li>Keep screenshots or records</li>
+                  </ul>
+              </li>
+          </ul>
+
+          <h3>6. User Responsibilities (Suggestions)</h3>
+          <h4>6.1 Sellers</h4>
+          <ul>
+              <li>Must post honest, clear product details</li>
+              <li>Reveal all defects or issues</li>
+              <li>Immediately mark listings as sold after sale</li>
+              <li>Follow prohibited item rules</li>
+          </ul>
+          <h4>6.2 Buyers</h4>
+          <ul>
+              <li>Must check item quality before payment</li>
+              <li>Understand all sales are final unless otherwise agreed</li>
+              <li>Report any suspicious or illegal listings</li>
+          </ul>
+
+          <h3>7. Disclaimers and Liability Limitations</h3>
+          <ul>
+              <li>We hold <strong>no liability</strong> for:
+                  <ul>
+                      <li>User behavior</li>
+                      <li>Product quality or legality</li>
+                      <li>Outcome of any deal</li>
+                      <li>Losses due to platform use</li>
+                      <li>WhatsApp or external app interactions</li>
+                  </ul>
+              </li>
+              <li>You agree to indemnify BITS Pilani Store for any issues arising from your usage.</li>
+          </ul>
+
+          <h3>8. Privacy and Data</h3>
+          <ul>
+              <li>We collect minimum data only to run the platform.</li>
+              <li>Seller contact is shared only when you click to contact them or when the contact information is viewed.</li>
+              <li>No tracking or storing of personal chats or payment info.</li>
+          </ul>
+
+          <h3>9. Violations and Enforcement</h3>
+          <ul>
+              <li>We may:
+                  <ul>
+                      <li>Remove any listing without prior notice</li>
+                      <li>Suspend or block accounts</li>
+                      <li>Inform BITS authorities if serious rules are broken</li>
+                      <li>Cooperate with law enforcement</li>
+                  </ul>
+              </li>
+          </ul>
+
+          <h3>10. Modifications</h3>
+          <ul>
+              <li>Terms may be updated anytime.</li>
+              <li>Continued usage implies agreement to updated terms.</li>
+          </ul>
+
+          <h3>11. General Provisions</h3>
+          <ul>
+              <li>These Terms are the entire agreement between us.</li>
+              <li>If one part is invalid, the rest still apply.</li>
+              <li><strong>This platform is student-run and unaffiliated with BITS Pilani administration.</strong></li>
+          </ul>
+
+          <p><strong>By using BITS Pilani Store, you confirm you have read, understood, and agreed to these Terms.</strong></p>
+      </div>
+      <div class="terms-modal-footer">
+          <button id="termsCloseBtn" class="terms-close-btn">Close</button>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js"></script>
+
+<script src="{% static 'bits/add_product.js' %}"></script>
+<script>
+    // Terms and conditions modal functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const termsLink = document.getElementById('termsLink');
+  const termsModal = document.getElementById('termsModal');
+  const termsClose = document.querySelector('.terms-close');
+  const termsCloseBtn = document.getElementById('termsCloseBtn');
+  const termsCheckbox = document.getElementById('termsCheckbox');
+  const termsError = document.getElementById('termsError');
+  const form = document.querySelector('.add-product-form');
+  
+  // Open modal when terms link is clicked
+  termsLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    termsModal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+  });
+  
+  // Close modal functions
+  const closeModal = () => {
+    termsModal.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+  
+  termsClose.addEventListener('click', closeModal);
+  termsCloseBtn.addEventListener('click', closeModal);
+  
+  // Close modal when clicking outside content
+  termsModal.addEventListener('click', function(e) {
+    if (e.target === termsModal) {
+      closeModal();
+    }
+  });
+  
+  // Form validation for terms checkbox
+  form.addEventListener('submit', function(e) {
+    if (!termsCheckbox.checked) {
+      e.preventDefault();
+      termsError.style.display = 'block';
+      
+      // Focus on the checkbox
+      termsCheckbox.focus();
+      
+      // Shake the checkbox container
+      const container = document.querySelector('.terms-checkbox-container');
+      container.classList.add('shake');
+      setTimeout(() => {
+        container.classList.remove('shake');
+      }, 500);
+    } else {
+      termsError.style.display = 'none';
+    }
+  });
+  
+  // Hide error message when checkbox is checked
+  termsCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+      termsError.style.display = 'none';
+    }
+  });
+  
+  // Close modal with escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && termsModal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+  
+  // Add shake animation to CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    .shake {
+      animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
+{% endblock %}

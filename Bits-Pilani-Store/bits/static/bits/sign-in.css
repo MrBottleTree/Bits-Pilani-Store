@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+:root {
+    --bg-color: #F0F2F5;
+    --card-color: #FFFFFF;
+    --primary: #2D4059;
+    --secondary: #3A6EA5;
+    --accent: #F07B3F;
+    --text: #2D3436;
+    --light-text: #636E72;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-card {
+    background-color: var(--card-color);
+    border-radius: 8px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 35px;
+    position: relative;
+    z-index: 2;
+}
+
+.title h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+.title h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent);
+    animation: growLine 0.6s ease-out 0.4s forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+}
+
+@keyframes growLine {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.login-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.description {
+    color: var(--light-text);
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    animation: fadeIn 0.6s ease 0.6s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.google-signin-wrapper {
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 0.6s ease 0.8s both;
+}
+
+.accents {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.accent-line {
+    position: absolute;
+    background-color: var(--primary);
+    opacity: 0.03;
+}
+
+.line1 {
+    width: 100%;
+    height: 150px;
+    top: -75px;
+    left: -50px;
+    transform: rotate(15deg);
+}
+
+.line2 {
+    width: 100%;
+    height: 150px;
+    bottom: -75px;
+    right: -50px;
+    transform: rotate(15deg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 30px 20px;
+    }
+    
+    .title h1 {
+        font-size: 1.7rem;
+    }
+}
+.error-messages {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.error-message {
+    color: #e74c3c; /* Red color for error */
+    font-size: 0.95rem;
+    font-weight: 600;
+}

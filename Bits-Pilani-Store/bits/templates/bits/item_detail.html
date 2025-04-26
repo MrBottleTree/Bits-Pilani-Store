@@ -1,0 +1,169 @@
+{% extends 'bits/layout.html' %}
+{% load static %}
+
+{% block title %}{{ item.name }} - BITS Pilani Pawnshop{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bits/item_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="product-container">
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a>
+        <span class="separator">/</span>
+        <span class="current">{{ item.name }}</span>
+    </div>
+
+    <div class="product-details">
+        <div class="product-gallery">
+            <div class="main-image-container">
+                {% if item.images.all %}
+                <img id="main-image" src="{{ item.images.first.image.url }}" alt="{{ item.name }}">
+                {% if item.is_sold %}
+                <div class="sold-overlay">
+                    <span class="sold-text">SOLD</span>
+                </div>
+                {% endif %}
+                {% else %}
+                <img id="main-image" src="{% static 'bits/images/placeholder.png' %}" alt="No image available">
+                {% endif %}
+            </div>
+            
+            {% if item.images.count > 1 %}
+            <div class="image-thumbnails">
+                {% for image in item.images.all %}
+                <div class="thumbnail {% if forloop.first %}active{% endif %}" data-image-url="{{ image.image.url }}">
+                    <img src="{{ image.image.url }}" alt="{{ item.name }} - Image {{ forloop.counter }}">
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="product-info">
+            <h1 class="product-title">{{ item.name }}</h1>
+            
+            <div class="product-price {% if item.is_sold %}sold{% endif %}">
+                ₹{{ item.price }}
+                {% if item.is_sold %}<span class="sold-badge">SOLD</span>{% endif %}
+            </div>
+            
+            <div class="product-meta">
+                <div class="meta-item">
+                    <i class="fas fa-user"></i>
+                    <span class="meta-label">Seller:</span>
+                    <span class="meta-value">{{ item.seller.name }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-building"></i>
+                    <span class="meta-label">Hostel:</span>
+                    <span class="meta-value">{{ item.hostel.name }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-tag"></i>
+                    <span class="meta-label">Category:</span>
+                    <span class="meta-value">{{ item.category.name }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-calendar-alt"></i>
+                    <span class="meta-label">Listed:</span>
+                    <span class="meta-value">{{ item.updated_at|date:"F d, Y" }}</span>
+                </div>
+            </div>
+            
+            {% if not item.is_sold %}
+            <div class="product-actions">
+                {% if item.whatsapp %}
+                <a href="{{ item.whatsapp }}" class="contact-btn whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Contact via WhatsApp
+                </a>
+                {% endif %}
+
+                <button id="show-contact-info" class="contact-btn info-btn">
+                    <i class="fas fa-info-circle"></i> Show Contact Info
+                </button>
+            </div>
+            {% endif %}
+
+            <div class="product-description">
+                <h2>Description</h2>
+                <div class="description-content">
+                    {{ item.description|linebreaks }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="similar-products">
+        <h2 class="section-title">Similar Products</h2>
+        
+        <div class="items-grid">
+            {% for similar_item in similar_items %}
+            <a href="{% url 'item_detail' similar_item.id %}" class="item-card-link">
+                <div class="item-card {% if similar_item.is_sold %}sold{% endif %}">
+                    {% if similar_item.is_sold %}
+                    <div class="sold-marker">
+                        <span class="sold-text">SOLD</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="item-image">
+                        {% if similar_item.images.all %}
+                        <img src="{{ similar_item.images.first.image.url }}" alt="{{ similar_item.name }}">
+                        {% else %}
+                        <img src="{% static 'bits/images/placeholder.png' %}" alt="No image available">
+                        {% endif %}
+                    </div>
+
+                    <div class="item-info">
+                        <h3 class="item-title">{{ similar_item.name }}</h3>
+                        <div class="item-price">₹{{ similar_item.price }}</div>
+                        
+                        <div class="item-meta">
+                            <div class="item-seller">
+                                <i class="fas fa-user"></i> {{ similar_item.seller.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="no-similar-items">
+                <p>No similar products found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Contact Information</h3>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="far fa-envelope"></i>
+                    <span class="contact-label">Email:</span>
+                    <span class="contact-value">{{ item.seller.email }}</span>
+                </div>
+                
+                {% if item.phone or item.seller.phone %}
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span class="contact-label">Phone:</span>
+                    <span class="contact-value">{{ item.phone|default:item.seller.phone }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="contact-note">
+                    <p>Note: Please use this contact information solely for inquiries related to this item.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'bits/item_detail.js' %}"></script>
+{% endblock %}

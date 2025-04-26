@@ -1,0 +1,32 @@
+{% extends 'bits/layout.html' %}
+{% load static %}
+
+{% block title %}Categories - BITS Pawnshop{% endblock %}
+
+{% block content %}
+<div class="categories-page">
+    <div class="categories-header">
+        <h1>Browse Categories</h1>
+        <p>Find items you need in your hostel life</p>
+    </div>
+
+    <div class="categories-grid">
+        {% for category in categories %}
+        <a href="/?c={{ category.id }}" class="category-card">
+            <div class="category-icon">
+                <i class="{{ category.icon_class }}"></i>
+            </div>
+            <h3>{{ category.name }}</h3>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bits/categories.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'bits/categories.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'bits/layout.html' %}
+{% load static %}
+
+{% block title %}My Listings{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bits/listings.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="items-container">
+    <h2 class="section-title">My Listings</h2>
+    <p class="section-subtitle">Manage the items you have listed on the marketplace</p>
+    
+    <div class="selection-button-container">
+        <button class="select-all-btn" id="selectAllBtn">
+            <i class="fas fa-check-square"></i> Select Items
+        </button>
+    </div>
+
+    <div class="items-grid">
+        {% for item in listings %}
+        <div class="item-card {% if item.is_sold %}sold{% endif %}" data-id="{{ item.id }}" data-sold="{{ item.is_sold|lower }}">
+            {% if item.is_sold %}
+            <div class="sold-marker">
+                <span class="sold-text">SOLD</span>
+            </div>
+            {% endif %}
+            
+            <div class="item-select-overlay"></div>
+            <input type="checkbox" class="item-select" aria-label="Select item">
+
+            <div class="item-content">
+                <div class="item-image">
+                    {% if item.images.all %}
+                    <img src="{{ item.images.first.image.url }}" alt="{{ item.name }}">
+                    {% else %}
+                    <img src="{% static 'bits/images/placeholder.png' %}" alt="No image available">
+                    {% endif %}
+                </div>
+
+                <div class="item-info">
+                    <h3 class="item-title">{{ item.name }}</h3>
+
+                    <div class="item-price">₹{{ item.price }}</div>
+
+                    <div class="item-description-container">
+                        <p class="item-description">{{ item.description }}</p>
+                    </div>
+
+                    <div class="item-meta">
+                        <div class="item-hostel">
+                            <i class="fas fa-building"></i> <span class="meta-label">Hostel:</span> {{ item.hostel.name }}
+                        </div>
+                        <div class="item-date">
+                            <i class="far fa-calendar-alt"></i> <span class="meta-label">Listed:</span> {{ item.added_at|date:"M d, Y H:i" }}
+                        </div>
+                        <div class="item-status">
+                            <i class="fas fa-tag"></i> <span class="meta-label">Status:</span> 
+                            {% if item.is_sold %}
+                                <span style="color: #e63946;">Sold</span>
+                            {% else %}
+                                <span style="color: #2ecc71;">Available</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="item-actions">
+                        <a href="{% url 'edit_item' item.id %}" class="edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-items">
+            <i class="fas fa-store fa-3x"></i>
+            <p>You haven't listed any items yet.</p>
+            <p>Start selling by adding your first item!</p>
+            <a href="{% url 'add_product' %}" class="add-item-btn">
+                <i></i> Add New Item
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Selection toolbar -->
+<div class="selection-toolbar">
+    <div class="selection-count">0 items selected</div>
+    <div class="selection-actions">
+        <button class="cancel-selection-btn" id="cancelSelectionBtn">
+            <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="action-btn repost" id="repostSelectedBtn">
+            <i class="fas fa-redo"></i> Repost
+        </button>
+        <button class="action-btn toggle" id="toggleSoldBtn">
+            <i class="fas fa-tag"></i> Toggle Sold
+        </button>
+        <button class="action-btn delete" id="deleteSelectedBtn">
+            <i class="fas fa-trash"></i> Delete
+        </button>
+    </div>
+</div>
+
+<form id="bulkActionForm" method="POST" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" id="selectedItems" name="selected_items" value="">
+    <input type="hidden" id="action" name="action" value="">
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'bits/listings.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% load static %}
+{% load pwa %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% progressive_web_app_meta %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITS Pilani Pawnshop - Sign In</title>
+    <link rel="stylesheet" href="{% static 'bits/sign-in.css' %}">
+    <!-- Load the Google identity services script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="title">
+                <h1>BITS Pawnshop</h1>
+            </div>
+
+            {% if messages %}
+            <div class="error-messages">
+                {% for message in messages %}
+                    {% if message.tags == "error" %}
+                    <p class="error-message">{{ message }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="login-content">
+                <p class="description">Use your BITS Pilani mail ID to access the marketplace.</p>
+                
+                <div class="google-signin-wrapper">
+                    <!-- This div automatically renders the Google Sign-In button -->
+                    <div id="g_id_onload"
+                        data-client_id="1023178212985-ag817naoes93gt8dfb2d9rvb5gigndv1.apps.googleusercontent.com"
+                        data-context="signin"
+                        data-ux_mode="popup"
+                        data-login_uri="{% url 'auth_receiver' %}"
+                        data-nonce=""
+                        data-auto_select="true"
+                        data-itp_support="true">
+                    </div>
+                    <!-- This div defines the appearance of the sign-in button -->
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="pill"
+                        data-theme="outline"
+                        data-text="signin_with"
+                        data-size="large"
+                        data-logo_alignment="left">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accents">
+                <div class="accent-line line1"></div>
+                <div class="accent-line line2"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-messages {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+    </style>
+</body>
+</html>

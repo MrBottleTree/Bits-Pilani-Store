@@ -1,0 +1,194 @@
+{% load static %}
+{% load pwa %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json?v=5">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BITS Pilani Pawnshop{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'bits/layout.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="main-container">
+        <header class="main-header">
+            <div class="logo">
+                <a href="{% url 'home' %}"><h1>BITS Pawnshop</h1></a>
+            </div>
+
+            <div class="category-btn desktop-only">
+                <button onclick="location.href='{% url 'categories' %}'" class="category-btn">
+                    <i class="fas fa-th-list"></i>
+                    <span>Categories</span>
+                </button>
+            </div>
+            
+            <div class="campus-filter-container desktop-only">
+                <div class="campus-dropdown-wrapper">
+                    <button class="campus-btn">
+                        <i class="fas fa-university"></i>
+                        <span>Campus: {% if selected_campus == 'GOA' %}Goa{% elif selected_campus == 'HYD' %}Hyderabad{% elif selected_campus == 'PIL' %}Pilani{% else %}All{% endif %}</span>
+                        <i class="fas fa-chevron-down ml-5"></i>
+                    </button>
+                    <div class="campus-menu">
+                        <a href="{% url 'home' %}?campus=GOA{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'GOA' %}class="active"{% endif %}>Goa</a>
+                        <a href="{% url 'home' %}?campus=HYD{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'HYD' %}class="active"{% endif %}>Hyderabad</a>
+                        <a href="{% url 'home' %}?campus=PIL{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'PIL' %}class="active"{% endif %}>Pilani</a>
+                        <a href="{% url 'home' %}?campus=DUB{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'DUB' %}class="active"{% endif %}>Dubai</a>
+                        <a href="{% url 'home' %}?campus=ALL{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'ALL' %}class="active"{% endif %}>All Campuses</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-container desktop-only">
+                <form action="{% url 'home' %}" method="GET">
+                    <input type="text" placeholder="Search products..." name="q">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <div class="sell-btn desktop-only">
+                <a href="{% url 'add_product' %}">
+                    <i class="fas fa-plus"></i>
+                    <span>Sell Item</span>
+                </a>
+            </div>
+            <div class="header-right">
+                <div class="mobile-search-container" id="searchContainer">
+                    <div class="search-icon" id="searchIcon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <form action="{% url 'home' %}" method="GET" id="searchForm">
+                        <input type="text" placeholder="Search products..." name="q" id="searchInput">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                        <div class="cancel-icon" id="cancelSearch">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="mobile-campus-container">
+                    <button class="mobile-campus-btn" title="{% if selected_campus == 'GOA' %}Goa Campus{% elif selected_campus == 'HYD' %}Hyderabad Campus{% elif selected_campus == 'PIL' %}Pilani Campus{% else %}All Campuses{% endif %}">
+                        <i class="fas fa-university"></i>
+                    </button>
+                    <div class="campus-menu">
+                        <a href="{% url 'home' %}?campus=GOA{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'GOA' %}class="active"{% endif %}>Goa</a>
+                        <a href="{% url 'home' %}?campus=HYD{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'HYD' %}class="active"{% endif %}>Hyderabad</a>
+                        <a href="{% url 'home' %}?campus=PIL{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'PIL' %}class="active"{% endif %}>Pilani</a>
+                        <a href="{% url 'home' %}?campus=DUB{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'DUB' %}class="active"{% endif %}>Dubai</a>
+                        <a href="{% url 'home' %}?campus=ALL{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.c %}&c={{ request.GET.c }}{% endif %}" {% if selected_campus == 'ALL' %}class="active"{% endif %}>All Campuses</a>
+                    </div>
+                </div>
+
+                <div class="profile-container">
+                    <div class="profile-pic">
+                        {% if request.session.user_data.picture %}
+                            <img src="{{ request.session.user_data.picture }}" alt="Profile">
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'my_listings' %}"><i class="fas fa-list"></i> My Listings</a>
+                        <a href="{% url 'feedback' %}"><i class="fas fa-comment-dots"></i>Feedback</a>
+                        <a href="{% url 'about_us' %}"><i class="fas fa-info-circle"></i> About Us</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'sign_out' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content">
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="message {% if message.tags %}message-{{ message.tags }}{% endif %}">
+                    <div class="message-content">
+                        <i class="message-icon fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                    <button class="message-close"><i class="fas fa-times"></i></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% block content %}
+
+            {% endblock %}
+        </main>
+        
+        <nav class="mobile-nav">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i><span>Home</span></a>
+            <div class="add-btn-container">
+                <a href="{% url 'add_product' %}" class="add-btn"><i class="fas fa-plus"></i></a>
+            </div>
+            <a href="{% url 'categories' %}"><i class="fas fa-th-list"></i><span>Categories</span></a>
+        </nav>
+    </div>
+
+    {% block scripts %}
+    <script src="{% static 'bits/layout.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function isAndroid() {
+                return /android/i.test(navigator.userAgent.toLowerCase());
+            }
+        
+            function isIOS() {
+                return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+            }
+        
+            function isInStandaloneMode() {
+                return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            }
+        
+            let deferredPrompt = null;
+            const installBanner = document.getElementById('install-banner');
+            const installButton = document.getElementById('install-button');
+        
+            // ✅ Always show the banner if on mobile and not already installed
+            if (!isInStandaloneMode() && (isAndroid() || isIOS())) {
+                if (installBanner) installBanner.style.display = 'block';
+            }
+        
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+            });
+        
+            if (installButton) {
+                installButton.addEventListener('click', () => {
+                    if (installBanner) installBanner.style.display = 'none';
+        
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then(choiceResult => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('✅ User installed the app');
+                                fetch('/log-install/', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({installed: true})
+                                });
+                            } else {
+                                alert("If the install dialog didn’t appear, tap the 3 dots and choose ‘Add to Home screen’. 📲");
+                            }
+                            deferredPrompt = null;
+                        });
+                    } else {
+                        alert("To install the app, tap the 3 dots in your browser and select ‘Add to Home screen’. 📲");
+                    }
+                });
+            }
+        });
+        </script>
+    {% endblock %}
+    {% block extra_js %}{% endblock %}
+    
+</body>
+</html>

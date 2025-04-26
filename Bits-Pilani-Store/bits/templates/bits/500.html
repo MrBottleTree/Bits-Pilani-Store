@@ -1,0 +1,110 @@
+{% extends 'bits/layout.html' %}
+{% load static %}
+
+{% block title %}Server Error | BITS Pilani Pawnshop{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 50px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .error-code {
+        font-size: 120px;
+        font-weight: 700;
+        color: #2D4059;
+        margin-bottom: 10px;
+        line-height: 1;
+    }
+
+    .error-title {
+        font-size: 32px;
+        font-weight: 600;
+        color: #2D4059;
+        margin-bottom: 20px;
+    }
+
+    .error-message {
+        font-size: 18px;
+        color: #636E72;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .error-icon {
+        font-size: 100px;
+        color: #F07B3F;
+        margin-bottom: 20px;
+    }
+
+    .home-button {
+        display: inline-flex;
+        align-items: center;
+        background-color: #F07B3F;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .home-button:hover {
+        background-color: #e06b2c;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(240, 123, 63, 0.3);
+    }
+
+    .home-button i {
+        margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+        .error-code {
+            font-size: 100px;
+        }
+        
+        .error-title {
+            font-size: 28px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .error-code {
+            font-size: 80px;
+        }
+        
+        .error-title {
+            font-size: 24px;
+        }
+        
+        .error-message {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <i class="fas fa-exclamation-triangle error-icon"></i>
+    <div class="error-code">500</div>
+    <h1 class="error-title">Server Error</h1>
+    <p class="error-message">
+        Oops! Something went wrong on our end. Our team has been notified and we're working to fix the issue.
+        Please try again later.
+    </p>
+    
+    <a href="{% url 'home' %}" class="home-button">
+        <i class="fas fa-home"></i> Back to Home
+    </a>
+</div>
+{% endblock %}

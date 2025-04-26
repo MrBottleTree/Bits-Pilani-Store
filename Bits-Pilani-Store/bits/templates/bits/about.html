@@ -1,0 +1,145 @@
+{% extends 'bits/layout.html' %}
+{% load static %}
+
+{% block title %}About BITS Pawnshop{% endblock %}
+
+{% block extra_css %}
+<style>
+  .about-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .about-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .about-header h1 {
+    color: var(--primary);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  .about-header p {
+    color: var(--light-text);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .about-section {
+    margin-bottom: 40px;
+  }
+  
+  .about-section h2 {
+    color: var(--primary);
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+    display: inline-block;
+  }
+  
+  .about-section p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  
+  .team-section {
+    margin-top: 50px;
+  }
+  
+  .team-members {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+  
+  .team-member {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .team-member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .team-member h3 {
+    color: var(--accent);
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  
+  .team-member p {
+    color: var(--light-text);
+    margin-bottom: 15px;
+  }
+  
+  .team-member .role {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 15px;
+  }
+  
+  .contact-info {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  
+  .contact-info p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .contact-label {
+    font-weight: 600;
+    margin-right: 10px;
+    color: var(--primary);
+  }
+  
+  @media (max-width: 768px) {
+    .about-container {
+      margin: 20px;
+      padding: 20px;
+    }
+    
+    .about-header h1 {
+      font-size: 1.8rem;
+    }
+    
+    .team-members {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-container">
+  <div class="about-header">
+    <h1>About BITS Pawnshop</h1>
+    <p>A marketplace built by BITSians, for BITSians</p>
+  </div>
+  <div class="about-section">
+    <h2>Our Story</h2>
+    <p>We’re Vishrut and Ayush, two students who wanted to create something useful for the BITS Pilani community. The idea for bits-pilani.store came up during a casual conversation about starting a project that could <strong>genuinely help students.</strong> That’s when we thought of building a platform where students could easily buy and sell items within campus.</p>
+  </div>
+  <div class="contact-info">
+    <p><span class="contact-label">Vishrut Ramraj (Developer of the website):</span> f20230352@goa.bits-pilani.ac.in</p>
+    <p><span class="contact-label">Ayush Sanger (Idea and Marketing):</span> f20230742@goa.bits-pilani.ac.in</p>
+  </div>
+</div></div>
+{% endblock %}
