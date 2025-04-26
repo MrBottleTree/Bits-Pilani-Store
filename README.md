@@ -62,6 +62,7 @@ OR set it temporarily
 export GOOGLE_OAUTH_CLIENT_ID=your-google-oauth-client-id  # Linux/Mac
 set GOOGLE_OAUTH_CLIENT_ID=your-google-oauth-client-id      # Windows
 ```
+### You need to setup your Django secret keys by yourself (As it is not provided in the settings.py file by me)
 ---
 ### 5. Apply migrations
 ```bash
