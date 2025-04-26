@@ -1,9 +1,6 @@
 "use strict";
+const CACHE_NAME = 'pwa-cache-v15';
 
-// Cache name - change the version when you update your assets
-const CACHE_NAME = 'pwa-cache-v15';  // bumped version to force reload
-
-// List of assets to cache during installation
 const urlsToCache = [
     '/',
     '/offline/',
@@ -11,7 +8,6 @@ const urlsToCache = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 ];
 
-// Install event handler - caches assets
 self.addEventListener('install', event => {
     self.skipWaiting();
     event.waitUntil(
@@ -29,7 +25,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// Activate event handler - clean old caches and claim clients
 self.addEventListener('activate', event => {
     event.waitUntil(
         Promise.all([
@@ -49,25 +44,21 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch event handler - serve cached content when possible
 self.addEventListener('fetch', event => {
     const requestUrl = event.request.url;
 
-    // 🚫 Always bypass cache for manifest.json (even with ?v=...)
     if (requestUrl.includes('manifest.json')) {
         console.log('🔄 Fetching manifest fresh:', requestUrl);
         event.respondWith(fetch(event.request));
         return;
     }
 
-    // Skip cross-origin requests like Google Analytics
     if (!requestUrl.startsWith(self.location.origin) &&
         !requestUrl.includes('googleapis.com') &&
         !requestUrl.includes('cdnjs.cloudflare.com')) {
         return;
     }
 
-    // For HTML page navigation
     if (event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request).catch(() => caches.match('/offline/'))
@@ -75,7 +66,6 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // For other requests like images, scripts, styles
     event.respondWith(
         caches.match(event.request).then(cachedResponse => {
             if (cachedResponse) {
